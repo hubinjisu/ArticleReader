@@ -1,12 +1,13 @@
 package com.article.binhu.articlereader.model;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by binhu on 16.06.17.
  */
 
-public class Article {
+public class Article implements Serializable {
     private String _id;
     private String web_url;
     private String snippet;
