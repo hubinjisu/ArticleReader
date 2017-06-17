@@ -1,20 +1,22 @@
 package com.article.binhu.articlereader.model;
 
-import java.io.Serializable;
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.List;
 
 /**
  * Created by binhu on 16.06.17.
  */
 
-public class Article implements Serializable {
+public class Article implements Parcelable {
     private String _id;
     private String web_url;
     private String snippet;
     private String lead_paragraph;
     private String source;
-    private String pub_date;
     private String section_name;
+    private String pub_date;
     private String subsection_name;
     private String type_of_material;
     private int wordCount;
@@ -125,4 +127,55 @@ public class Article implements Serializable {
     public void setHeadline(HeadLine headline) {
         this.headline = headline;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this._id);
+        dest.writeString(this.web_url);
+        dest.writeString(this.snippet);
+        dest.writeString(this.lead_paragraph);
+        dest.writeString(this.source);
+        dest.writeString(this.section_name);
+        dest.writeString(this.pub_date);
+        dest.writeString(this.subsection_name);
+        dest.writeString(this.type_of_material);
+        dest.writeInt(this.wordCount);
+        dest.writeParcelable(this.headline, flags);
+        dest.writeTypedList(this.multimedia);
+    }
+
+    public Article() {
+    }
+
+    protected Article(Parcel in) {
+        this._id = in.readString();
+        this.web_url = in.readString();
+        this.snippet = in.readString();
+        this.lead_paragraph = in.readString();
+        this.source = in.readString();
+        this.section_name = in.readString();
+        this.pub_date = in.readString();
+        this.subsection_name = in.readString();
+        this.type_of_material = in.readString();
+        this.wordCount = in.readInt();
+        this.headline = in.readParcelable(HeadLine.class.getClassLoader());
+        this.multimedia = in.createTypedArrayList(Multimedia.CREATOR);
+    }
+
+    public static final Parcelable.Creator<Article> CREATOR = new Parcelable.Creator<Article>() {
+        @Override
+        public Article createFromParcel(Parcel source) {
+            return new Article(source);
+        }
+
+        @Override
+        public Article[] newArray(int size) {
+            return new Article[size];
+        }
+    };
 }

@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -37,7 +38,6 @@ public class ArticlesFragment extends Fragment implements ArticlesContract.IArti
     private List<Article> articles;
 
     public ArticlesFragment() {
-
     }
 
     @Nullable
@@ -48,11 +48,29 @@ public class ArticlesFragment extends Fragment implements ArticlesContract.IArti
         articlesPresenter = new ArticlesPresenter(this);
         articleListView = (RecyclerView) view.findViewById(R.id.article_list);
         progressBar = (ProgressBar)view.findViewById(R.id.loading_progress);
-        articles = new ArrayList<Article>();
+
+        return view;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Log.i(TAG, "onActivityCreated: ");
+        if (savedInstanceState != null) {
+            articles = savedInstanceState.getParcelableArrayList("saved_data");
+        }
+        if (articles == null) {
+            Log.i(TAG, "savedData == null");
+            articles = new ArrayList<Article>();
+            articlesPresenter.loadArticles();
+        } else {
+            Log.i(TAG, "savedData: " + articles.size());
+            showProgress(false);
+        }
         articleAdapter = new ArticleAdapter(getActivity(), articles);
         articleListView.setLayoutManager(new LinearLayoutManager(getActivity()));
         articleListView.setAdapter(articleAdapter);
-
+//        articleListView.addItemDecoration(new VerticalItemDecoration(R.dimen.interval_space));
         articleAdapter.setOnItemClickListener(new ArticleAdapter.OnItemClickListener(){
             @Override
             public void onItemClick(View view , int position){
@@ -69,14 +87,12 @@ public class ArticlesFragment extends Fragment implements ArticlesContract.IArti
                         .commit();
             }
         });
-//        articleListView.addItemDecoration(new VerticalItemDecoration(R.dimen.interval_space));
-        articlesPresenter.loadArticles();
-        return view;
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         Log.i(TAG, "onSaveInstanceState");
+        outState.putParcelableArrayList("saved_data", (ArrayList<? extends Parcelable>) articles);
         super.onSaveInstanceState(outState);
     }
 

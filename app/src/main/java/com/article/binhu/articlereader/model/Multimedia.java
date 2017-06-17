@@ -1,12 +1,13 @@
 package com.article.binhu.articlereader.model;
 
-import java.util.List;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 /**
  * Created by binhu on 16.06.17.
  */
 
-public class Multimedia {
+public class Multimedia implements Parcelable {
     private String type;
     private int width;
     private int height;
@@ -63,4 +64,43 @@ public class Multimedia {
     }
 
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.type);
+        dest.writeInt(this.width);
+        dest.writeInt(this.height);
+        dest.writeString(this.url);
+        dest.writeString(this.subtype);
+        dest.writeParcelable(this.legacy, flags);
+    }
+
+    public Multimedia() {
+    }
+
+    protected Multimedia(Parcel in) {
+        this.type = in.readString();
+        this.width = in.readInt();
+        this.height = in.readInt();
+        this.url = in.readString();
+        this.subtype = in.readString();
+        this.legacy = in.readParcelable(Legacy.class.getClassLoader());
+    }
+
+    public static final Parcelable.Creator<Multimedia> CREATOR =
+            new Parcelable.Creator<Multimedia>() {
+                @Override
+                public Multimedia createFromParcel(Parcel source) {
+                    return new Multimedia(source);
+                }
+
+                @Override
+                public Multimedia[] newArray(int size) {
+                    return new Multimedia[size];
+                }
+            };
 }
