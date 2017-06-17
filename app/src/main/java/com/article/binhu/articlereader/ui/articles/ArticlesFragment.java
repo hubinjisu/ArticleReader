@@ -1,5 +1,6 @@
 package com.article.binhu.articlereader.ui.articles;
 
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -44,6 +45,7 @@ public class ArticlesFragment extends Fragment implements ArticlesContract.IArti
         articleAdapter = new ArticleAdapter(getActivity(), articles);
         articleListView.setLayoutManager(new LinearLayoutManager(getActivity()));
         articleListView.setAdapter(articleAdapter);
+        articleListView.addItemDecoration(new VerticalItemDecoration(R.dimen.interval_space));
         articlesPresenter.loadArticles();
         return view;
     }
@@ -69,5 +71,19 @@ public class ArticlesFragment extends Fragment implements ArticlesContract.IArti
     @Override
     public void onLoadArticlesFailed() {
 
+    }
+
+    public class VerticalItemDecoration extends RecyclerView.ItemDecoration {
+        private final int mVerticalSpaceHeight;
+
+        public VerticalItemDecoration(int mVerticalSpaceHeight) {
+            this.mVerticalSpaceHeight = mVerticalSpaceHeight;
+        }
+
+        @Override
+        public void getItemOffsets(Rect outRect, View view, RecyclerView parent,
+                                   RecyclerView.State state) {
+            outRect.top = mVerticalSpaceHeight;
+        }
     }
 }

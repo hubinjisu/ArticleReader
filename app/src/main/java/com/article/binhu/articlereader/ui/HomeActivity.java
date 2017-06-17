@@ -1,7 +1,7 @@
 package com.article.binhu.articlereader.ui;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -13,6 +13,7 @@ import com.article.binhu.articlereader.model.Article;
 import com.article.binhu.articlereader.model.ArticleResponse;
 import com.article.binhu.articlereader.model.RequestResponse;
 import com.article.binhu.articlereader.service.ArticleService;
+import com.article.binhu.articlereader.ui.articles.ArticlesFragment;
 import com.squareup.picasso.Picasso;
 
 import javax.inject.Inject;
@@ -37,14 +38,15 @@ public class HomeActivity extends AppCompatActivity {
         ((MainApplication) getApplication()).getServiceComponent().inject(this);
         if (savedInstanceState == null) {
             Log.d(TAG, "onCreate: load fragment");
-//            getSupportFragmentManager()
-//                    .beginTransaction()
-//                    .add(R.id.content_container, new ArticlesFragment(), "rageComicList")
-//                    .commit();
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.content_container, new ArticlesFragment(), "rageComicList")
+                    .commit();
         }
         textView = (TextView)findViewById(R.id.test_service);
         imageView = (ImageView)findViewById(R.id.test_img);
-        Picasso.with(this).load("https://www.nytimes.com/images/2017/06/18/sports/18LYME-GOLF/18LYME-GOLF-articleLarge.jpg").into(imageView);
+//        Picasso.with(this).load("https://www.nytimes.com/images/2017/06/18/sports/18LYME-GOLF/18LYME-GOLF-articleLarge.jpg").into(imageView);
+        Picasso.with(this).load(R.mipmap.ic_launcher_round).into(imageView);
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

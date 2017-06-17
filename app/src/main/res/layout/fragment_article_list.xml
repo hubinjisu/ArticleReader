@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:id="@+id/article_list"
     app:layoutManager="LinearLayoutManager"
-    tools:listitem="@layout/view_article_item" >
+    tools:listitem="@layout/view_article_item"
+    >
 
 </android.support.v7.widget.RecyclerView>

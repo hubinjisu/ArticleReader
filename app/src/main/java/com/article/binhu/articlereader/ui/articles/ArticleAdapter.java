@@ -57,14 +57,14 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
             holder.articleSnippet.setText(item.getSnippet());
             holder.articleOriginal.setText(item.getSource());
             holder.articlePubDate.setText(item.getPub_date());
-            if (item.getMultimedia() != null && item.getMultimedia().size() > 0) {
-                String hostUrl = item.getWeb_url().substring(0, item.getWeb_url().indexOf("com")+4);
-                String imgUrl = hostUrl + item.getMultimedia().get(0).getUrl();
-                int width = item.getMultimedia().get(0).getWidth();
-                int height = item.getMultimedia().get(0).getHeight();
-                Log.i(TAG, "onBindViewHolder: imgUrl:" + imgUrl);
-                Picasso.with(context).load(imgUrl).into(holder.articleImg);
-            }
+//            if (item.getMultimedia() != null && item.getMultimedia().size() > 0) {
+//                String hostUrl = item.getWeb_url().substring(0, item.getWeb_url().indexOf("com")+4);
+//                String imgUrl = hostUrl + item.getMultimedia().get(0).getUrl();
+//                int width = item.getMultimedia().get(0).getWidth();
+//                int height = item.getMultimedia().get(0).getHeight();
+//                Log.i(TAG, "onBindViewHolder: imgUrl:" + imgUrl);
+                Picasso.with(context).load("http://www.nytimes.com/images/2017/06/18/fashion/18DADDY/18DADDY-articleLarge.jpg").into(holder.articleImg);
+//            }
         } catch (Exception e) {
         }
     }
