@@ -11,7 +11,7 @@
 10. In unit test transform async operation to sync operation
 
 Unit Test Result:
-
+![image](https://github.com/hubinjisu/images/blob/master/images/article_reader_unit_test.png)
 
 Screen:
 
