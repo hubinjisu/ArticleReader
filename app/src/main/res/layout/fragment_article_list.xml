@@ -14,13 +14,19 @@
         android:layout_centerInParent="true"
         android:visibility="visible"/>
 
-    <android.support.v7.widget.RecyclerView
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/article_refresh"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/article_list"
-        app:layoutManager="LinearLayoutManager"
-        tools:listitem="@layout/view_article_item"
-        android:visibility="gone"
-        />
+        android:layout_height="match_parent">
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/article_list"
+            app:layoutManager="LinearLayoutManager"
+            tools:listitem="@layout/view_article_item"
+            android:visibility="gone"
+            />
+        </android.support.v4.widget.SwipeRefreshLayout>
+
 
 </RelativeLayout>

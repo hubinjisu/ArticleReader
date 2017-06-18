@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -39,6 +40,7 @@ public class ArticlesFragment extends Fragment implements ArticlesContract.IArti
 
     private RecyclerView articleListView;
     private ProgressBar progressBar;
+    private SwipeRefreshLayout refreshLayout;
     private ArticleAdapter articleAdapter;
     private View view;
     private List<Article> articles;
@@ -60,6 +62,7 @@ public class ArticlesFragment extends Fragment implements ArticlesContract.IArti
         view = inflater.inflate(R.layout.fragment_article_list, container, false);
         articleListView = (RecyclerView) view.findViewById(R.id.article_list);
         progressBar = (ProgressBar)view.findViewById(R.id.loading_progress);
+        refreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.article_refresh);
 
         return view;
     }
@@ -99,6 +102,14 @@ public class ArticlesFragment extends Fragment implements ArticlesContract.IArti
                         .commit();
             }
         });
+
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Log.i(TAG, "onRefresh");
+                articlesPresenter.loadArticles();
+            }
+        });
     }
 
     @Override
@@ -136,11 +147,13 @@ public class ArticlesFragment extends Fragment implements ArticlesContract.IArti
         this.articles.addAll(0, articles);
         Toast.makeText(getActivity(), R.string.load_successful, Toast.LENGTH_LONG).show();
         articleAdapter.resetData(this.articles);
+        refreshLayout.setRefreshing(false);
     }
 
     @Override
     public void onLoadArticlesFailed() {
         Toast.makeText(getActivity(), R.string.load_failed, Toast.LENGTH_LONG).show();
+        refreshLayout.setRefreshing(false);
     }
 
     private void showProgress(final boolean show)

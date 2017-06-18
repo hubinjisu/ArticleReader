@@ -2,7 +2,6 @@ package com.article.binhu.articlereader.ui.articles;
 
 import android.util.Log;
 
-import com.article.binhu.articlereader.model.Article;
 import com.article.binhu.articlereader.model.RequestResponse;
 import com.article.binhu.articlereader.service.ArticleService;
 
@@ -20,6 +19,7 @@ public class ArticlesPresenter implements ArticlesContract.IArticlesPresenter {
     private static final String TAG = "ArticlesPresenter";
     private ArticlesContract.IArticlesView articlesView;
     private ArticleService articleService;
+    private String updateFlag = "";
 
     @Inject
     public ArticlesPresenter(ArticlesContract.IArticlesView articlesView, ArticleService articleService) {
@@ -43,11 +43,14 @@ public class ArticlesPresenter implements ArticlesContract.IArticlesPresenter {
                     Log.i(TAG, "accept: ");
                     articlesView.stopProgress();
                     if (articleResponse != null) {
-                        Log.i(TAG, "article: getResponse: ");
-                        for (Article article : articleResponse.getDocs()) {
-                            Log.i(TAG, "call: article:" + article.getWeb_url());
+                        String newFlag = articleResponse.getDocs().get(0).get_id();
+                        Log.i(TAG, "article: getResponse: updateFlag: " + updateFlag + " new:" + newFlag);
+                        if (updateFlag.equals(newFlag)) {
+                            articlesView.onLoadArticlesFailed();
+                        } else {
+                            updateFlag = newFlag;
+                            articlesView.onLoadArticlesSuccessful(articleResponse.getDocs());
                         }
-                        articlesView.onLoadArticlesSuccessful(articleResponse.getDocs());
                     } else {
                         articlesView.onLoadArticlesFailed();
                     }
