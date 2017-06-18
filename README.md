@@ -1,4 +1,5 @@
 # ArticleReader
+This is a sample project to display a list of news items fetched from the New York Times article search API and allows browsing the full article in a webview. The following is the key points in the project:
 1. MVP architecture
 2. Dagger2 to make the dependency injection
 3. Retrofit2 + Okhttp + Gson + Rxjava2 to make the HTTP request for service API
