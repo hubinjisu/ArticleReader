@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">ArticleReader</string>
-    <string name="load_successful">Load the Data successful!</string>
+    <string name="load_successful">Successfully load %d new data!</string>
     <string name="load_failed">Load the Data failed</string>
+    <string name="load_no_update">No more new data!</string>
+    <string name="welcome">Welcome!</string>
 
 </resources>

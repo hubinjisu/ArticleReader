@@ -21,7 +21,7 @@ public class Article implements Parcelable {
     private String type_of_material;
     private int wordCount;
     private HeadLine headline;
-//    private Byline byline;
+    //    private Byline byline;
     private List<Multimedia> multimedia;
 
     public List<Multimedia> getMultimedia() {

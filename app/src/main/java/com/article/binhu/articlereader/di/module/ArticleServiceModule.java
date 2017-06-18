@@ -6,6 +6,7 @@ import com.article.binhu.articlereader.MainApplication;
 import com.article.binhu.articlereader.service.ArticleService;
 import com.article.binhu.articlereader.ui.articles.ArticlesFragment;
 import com.article.binhu.articlereader.ui.articles.ArticlesPresenter;
+import com.article.binhu.articlereader.ui.articleviewer.ArticleViewerFragment;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -75,6 +76,12 @@ public class ArticleServiceModule {
     @Singleton
     ArticlesFragment provideArticleFragment() {
         return new ArticlesFragment();
+    }
+
+    @Provides
+    @Singleton
+    ArticleViewerFragment provideArticleViewFragment() {
+        return new ArticleViewerFragment();
     }
 
     @Provides

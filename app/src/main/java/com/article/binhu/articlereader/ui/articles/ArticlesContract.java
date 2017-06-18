@@ -7,6 +7,7 @@ import com.article.binhu.articlereader.model.Article;
 import java.util.List;
 
 /**
+ * Interface for the Article list presenter and viewer
  * Created by binhu on 16.06.17.
  */
 
@@ -24,5 +25,7 @@ public interface ArticlesContract {
         void onLoadArticlesSuccessful(List<Article> articles);
 
         void onLoadArticlesFailed();
+
+        void onLoadArticlesNoUpdate();
     }
 }

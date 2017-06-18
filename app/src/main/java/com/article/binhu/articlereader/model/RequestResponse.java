@@ -1,9 +1,5 @@
 package com.article.binhu.articlereader.model;
 
-import com.google.gson.annotations.SerializedName;
-
-import java.util.List;
-
 /**
  * Created by binhu on 16.06.17.
  */

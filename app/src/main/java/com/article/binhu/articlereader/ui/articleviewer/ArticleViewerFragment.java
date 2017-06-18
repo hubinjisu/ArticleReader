@@ -1,6 +1,5 @@
 package com.article.binhu.articlereader.ui.articleviewer;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -11,12 +10,12 @@ import android.webkit.WebView;
 
 import com.article.binhu.articlereader.R;
 
+/**
+ * Show the web page in a web viewer
+ * Created by binhu on 17.06.17.
+ */
 public class ArticleViewerFragment extends Fragment {
     private static final String TAG = "ArticleViewerFragment";
-
-    private WebView articleViewer;
-
-    private String webUrl;
 
     public ArticleViewerFragment() {
     }
@@ -24,31 +23,22 @@ public class ArticleViewerFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.d(TAG, "onCreateView");
+        Log.i(TAG, "onCreateView");
         View view = inflater.inflate(R.layout.fragment_article_viewer, container, false);
-        articleViewer = (WebView)view.findViewById(R.id.article_viewer);
+        WebView articleViewer = (WebView) view.findViewById(R.id.article_viewer);
+//        // Enable Javascript
+//        WebSettings webSettings = articleViewer.getSettings();
+//        webSettings.setJavaScriptEnabled(true);
+
+        // Force links and redirects to open in the WebView instead of in a browser
+//        articleViewer.setWebViewClient(new WebViewClient());
         Bundle bundle = getArguments();
         if (bundle != null) {
-            webUrl = bundle.getString("web_url");
+            String webUrl = bundle.getString("web_url");
+            Log.i(TAG, "web url: " + webUrl);
             articleViewer.loadUrl(webUrl);
             getActivity().getSupportFragmentManager().popBackStack();
         }
         return view;
-    }
-
-    @Override
-    public void onStop() {
-        Log.d(TAG, "onStop");
-        super.onStop();
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
     }
 }

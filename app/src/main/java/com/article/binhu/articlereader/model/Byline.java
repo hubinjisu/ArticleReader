@@ -8,7 +8,7 @@ import android.os.Parcelable;
  */
 
 public class Byline implements Parcelable {
-//    private String person;
+    //    private String person;
     private String original;
     private String organization;
 

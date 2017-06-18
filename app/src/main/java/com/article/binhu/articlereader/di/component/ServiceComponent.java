@@ -14,6 +14,8 @@ import dagger.Component;
 @Component(modules = {ArticleServiceModule.class})
 public interface ServiceComponent {
     void inject(ArticlesPresenter articlesPresenter);
+
     void inject(HomeActivity homeActivity);
+
     void inject(ArticlesFragment articlesFragment);
 }

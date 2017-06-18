@@ -28,6 +28,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
+ * Unit test for the ArticlesPresenter
  * Created by hubin on 2017/6/18.
  */
 public class ArticlesPresenterTest {
@@ -44,12 +45,14 @@ public class ArticlesPresenterTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         ShadowLog.stream = System.out;
+        // For testing to transform the async to sync
         asyncToSync();
         articlesPresenter = new ArticlesPresenter(articlesView, articleService);
     }
 
     @Test
     public void testLoadArticlesSuccessful() throws Exception {
+        // init the test data
         Article article = new Article();
         article.set_id("123");
         article.setWeb_url("test url");
@@ -60,9 +63,11 @@ public class ArticlesPresenterTest {
         RequestResponse requestResponse = new RequestResponse();
         requestResponse.setResponse(articleResponse);
 
+        // Mock service callback
         when(articleService.loadArticles(anyString())).thenReturn(Observable.just(requestResponse));
         articlesPresenter.loadArticles();
 
+        // check the logic
         verify(articlesView).startProgress();
         verify(articleService).loadArticles(anyString());
         verify(articlesView).stopProgress();
@@ -70,11 +75,52 @@ public class ArticlesPresenterTest {
 
         List<Article> captorArticles = captor.getValue();
 
+        // check the returned data
         Assert.assertEquals(captorArticles.size(), 1);
         Assert.assertEquals(captorArticles.get(0).get_id(), "123");
-
     }
 
+    @Test
+    public void testLoadArticlesNoNewData() throws Exception {
+        // init the test data
+        Article article = new Article();
+        article.set_id("123");
+        article.setWeb_url("test url");
+        List<Article> articles = new ArrayList<>();
+        articles.add(article);
+        ArticleResponse articleResponse = new ArticleResponse();
+        articleResponse.setDocs(articles);
+        RequestResponse requestResponse = new RequestResponse();
+        requestResponse.setResponse(articleResponse);
+        articlesPresenter.newestId = "123";
+
+        // Mock service callback
+        when(articleService.loadArticles(anyString())).thenReturn(Observable.just(requestResponse));
+        articlesPresenter.loadArticles();
+
+        // check the logic
+        verify(articlesView).startProgress();
+        verify(articleService).loadArticles(anyString());
+        verify(articlesView).stopProgress();
+        verify(articlesView).onLoadArticlesNoUpdate();
+    }
+
+    @Test
+    public void testLoadArticlesFailed() throws Exception {
+        // Mock service callback
+        when(articleService.loadArticles(anyString())).thenReturn(Observable.error(new Throwable()));
+        articlesPresenter.loadArticles();
+
+        // check the logic
+        verify(articlesView).startProgress();
+        verify(articleService).loadArticles(anyString());
+        verify(articlesView).stopProgress();
+        verify(articlesView).onLoadArticlesFailed();
+    }
+
+    /**
+     * Transform the asynchronous rxjava processing to synchronous
+     */
     private void asyncToSync() {
         RxJavaPlugins.reset();
         RxAndroidPlugins.reset();

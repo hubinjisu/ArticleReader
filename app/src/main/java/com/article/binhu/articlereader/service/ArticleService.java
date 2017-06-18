@@ -8,6 +8,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Header;
 
 /**
+ * Service for load the articles from server
  * Created by binhu on 16.06.17.
  */
 
