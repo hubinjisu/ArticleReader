@@ -18,6 +18,10 @@ public class HomeActivity extends AppCompatActivity {
     private static final String TAG = "HomeActivity";
     @Inject
     ArticleService articleService;
+
+    @Inject
+    ArticlesFragment articlesFragment;
+
     private TextView textView;
     private ImageView imageView;
 
@@ -26,12 +30,12 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Log.i(TAG, "onCreate: ");
         setContentView(R.layout.activity_home);
-        ((MainApplication) getApplication()).getServiceComponent().inject(this);
+        MainApplication.getServiceComponent().inject(this);
         if (savedInstanceState == null) {
-            Log.d(TAG, "onCreate: load fragment");
+            Log.i(TAG, "onCreate: load fragment");
             getSupportFragmentManager()
                     .beginTransaction()
-                    .add(R.id.content_container, new ArticlesFragment(), "ArticlesFragment")
+                    .add(R.id.content_container, articlesFragment, "ArticlesFragment")
                     .addToBackStack("BackStack")
                     .commit();
         }

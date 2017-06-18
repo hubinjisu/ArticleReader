@@ -11,7 +11,7 @@ import com.article.binhu.articlereader.di.module.ArticleServiceModule;
  */
 
 public class MainApplication extends Application {
-    private ServiceComponent serviceComponent;
+    private static ServiceComponent serviceComponent;
 
     public MainApplication() {
         serviceComponent = DaggerServiceComponent.builder()
@@ -19,7 +19,7 @@ public class MainApplication extends Application {
                 .build();
     }
 
-    public ServiceComponent getServiceComponent() {
+    public static ServiceComponent getServiceComponent() {
         return serviceComponent;
     }
 }

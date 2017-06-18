@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.article.binhu.articlereader.MainApplication;
 import com.article.binhu.articlereader.R;
 import com.article.binhu.articlereader.model.Article;
 import com.article.binhu.articlereader.ui.articleviewer.ArticleViewerFragment;
@@ -23,14 +24,19 @@ import com.article.binhu.articlereader.ui.articleviewer.ArticleViewerFragment;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 /**
  * Created by binhu on 16.06.17.
  */
 
-public class ArticlesFragment extends Fragment implements ArticlesContract.IArticlesView{
+public class ArticlesFragment extends Fragment implements ArticlesContract.IArticlesView {
 
     private static final String TAG = "ArticlesFragment";
-    private ArticlesContract.IArticlesPresenter articlesPresenter;
+
+    @Inject
+    ArticlesPresenter articlesPresenter;
+
     private RecyclerView articleListView;
     private ProgressBar progressBar;
     private ArticleAdapter articleAdapter;
@@ -40,12 +46,18 @@ public class ArticlesFragment extends Fragment implements ArticlesContract.IArti
     public ArticlesFragment() {
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        Log.i(TAG, "onCreate: ");
+        super.onCreate(savedInstanceState);
+        MainApplication.getServiceComponent().inject(this);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         Log.i(TAG, "onCreateView: ");
         view = inflater.inflate(R.layout.fragment_article_list, container, false);
-        articlesPresenter = new ArticlesPresenter(this);
         articleListView = (RecyclerView) view.findViewById(R.id.article_list);
         progressBar = (ProgressBar)view.findViewById(R.id.loading_progress);
 

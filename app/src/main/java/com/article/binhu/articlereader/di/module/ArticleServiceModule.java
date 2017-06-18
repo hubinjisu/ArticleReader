@@ -4,6 +4,8 @@ import android.app.Application;
 
 import com.article.binhu.articlereader.MainApplication;
 import com.article.binhu.articlereader.service.ArticleService;
+import com.article.binhu.articlereader.ui.articles.ArticlesFragment;
+import com.article.binhu.articlereader.ui.articles.ArticlesPresenter;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -67,5 +69,17 @@ public class ArticleServiceModule {
     @Singleton
     ArticleService provideArticleService(Retrofit retrofit) {
         return retrofit.create(ArticleService.class);
+    }
+
+    @Provides
+    @Singleton
+    ArticlesFragment provideArticleFragment() {
+        return new ArticlesFragment();
+    }
+
+    @Provides
+    @Singleton
+    ArticlesPresenter provideArticlesPresenter(ArticlesFragment articlesView, ArticleService articleService) {
+        return new ArticlesPresenter(articlesView, articleService);
     }
 }
