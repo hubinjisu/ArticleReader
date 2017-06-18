@@ -10,5 +10,9 @@
 9. Junit + Mokito to make unit test of the presenter
 10. In unit test transform async operation to sync operation
 
+Unit Test Result:
+
+
 Screen:
+
 ![image](https://github.com/hubinjisu/images/blob/master/images/article_reader.gif)
