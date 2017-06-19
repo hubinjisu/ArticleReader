@@ -3,10 +3,11 @@ package com.article.binhu.articlereader.ui.articles;
 import android.util.Log;
 
 import com.article.binhu.articlereader.model.Article;
+import com.article.binhu.articlereader.model.ArticleResponse;
 import com.article.binhu.articlereader.model.RequestResponse;
 import com.article.binhu.articlereader.service.ArticleService;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import javax.inject.Inject;
 
@@ -40,38 +41,39 @@ public class ArticlesPresenter implements ArticlesContract.IArticlesPresenter {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(RequestResponse::getResponse)
-                .doOnError(throwable -> {
-                    articlesView.stopProgress();
-                    articlesView.onLoadArticlesFailed();
-                })
-                .subscribe(articleResponse -> {
-                    Log.i(TAG, "accept: ");
-                    articlesView.stopProgress();
-                    if (articleResponse != null) {
-                        int flagIndex = 0;
-                        List<Article> results = articleResponse.getDocs();
-                        // check if there are new data or not
-                        for (flagIndex = 0; flagIndex < results.size(); flagIndex++) {
-                            String newId = results.get(flagIndex).get_id();
-                            // compare with the first old data id, and get the last index of the new data
-                            if (newestId.equals(newId)) {
-                                break;
-                            }
+                .map(ArticleResponse::getDocs)
+                .map(articles -> {
+                    int flagIndex = 0;
+                    // check if there are new data or not
+                    for (flagIndex = 0; flagIndex < articles.size(); flagIndex++) {
+                        String newId = articles.get(flagIndex).get_id();
+                        // compare with the first old data id, and get the last index of the new data
+                        if (newestId.equals(newId)) {
+                            break;
                         }
-
-                        // The first item matched with id flag, means no new data
-                        if (flagIndex == 0) {
-                            articlesView.onLoadArticlesNoUpdate();
-                        }
-                        else {
-                            newestId = results.get(0).get_id();
-                            results.subList(0, flagIndex - 1);
-                            articlesView.onLoadArticlesSuccessful(results);
-                        }
-                        Log.i(TAG, "article: getResponse: newestId: " + newestId);
                     }
-                    else {
-                        articlesView.onLoadArticlesFailed();
+
+                    Log.i(TAG, "map：flagIndex:" + flagIndex);
+                    // save the newest id as the flag
+                    newestId = articles.get(0).get_id();
+                    // Collect all the filtered data by id flag
+                    articles = articles.subList(0, flagIndex);
+                    // callback here to distinguish the empty list situation in onErrorReturn
+                    if (articles.size() == 0) {
+                        articlesView.onLoadArticlesNoUpdate();
+                    }
+                    return articles;
+                })
+                .onErrorReturn(throwable -> {
+                    Log.e(TAG, "error.....");
+                    articlesView.onLoadArticlesFailed();
+                    return new ArrayList<Article>();
+                })
+                .subscribe(articles -> {
+                    Log.i(TAG, "subscribe");
+                    articlesView.stopProgress();
+                    if (articles.size() > 0) {
+                        articlesView.onLoadArticlesSuccessful(articles);
                     }
                 });
     }
