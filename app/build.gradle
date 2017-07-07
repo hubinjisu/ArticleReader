@@ -14,6 +14,13 @@ android {
             enabled true
         }
     }
+
+    repositories {
+        maven {
+            url 'https://maven.google.com'
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
